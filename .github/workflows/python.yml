@@ -1,0 +1,34 @@
+name: Python Artifacts
+
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Create artifact directory
+        run: mkdir -p path/to/artifact
+
+      - name: Run Python script and save output
+        run: |
+          echo hello > path/to/artifact/world.txt
+          python -c "import sys; print(sys.version)" >> path/to/artifact/world.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: path/to/artifact/world.txt
