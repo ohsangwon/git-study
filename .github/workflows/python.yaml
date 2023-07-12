@@ -1,4 +1,4 @@
-name: Python Artifacts
+name: Python
 
 on:
   workflow_dispatch
@@ -28,7 +28,7 @@ jobs:
           python -c "import sys; print(sys.version)" >> path/to/artifact/${{ matrix.python-version }}.txt
 
       - name: Upload artifact for Python ${{ matrix.python-version }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: my-artifact-${{ matrix.python-version }}
           path: path/to/artifact/${{ matrix.python-version }}.txt
