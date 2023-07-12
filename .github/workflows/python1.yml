@@ -1,6 +1,7 @@
-name: Python
+name: Python Artifacts
 
-on: workflow_dispatch
+on:
+  workflow_dispatch
 
 jobs:
   build:
@@ -8,27 +9,26 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "4.0"]
+        python-version: ["3.8", "3.9", "3.10"]
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
         with:
-          node-version: '16'
-      - name: Install Python ${{ matrix.python-version }}
+          python-version: ${{ matrix.python-version }}
+
+      - name: Create artifact directory
+        run: mkdir -p path/to/artifact
+
+      - name: Run Python script and save output
         run: |
-          sudo apt-get update
-          sudo apt-get install -y software-properties-common
-          sudo add-apt-repository -y ppa:deadsnakes/ppa
-          sudo apt-get update
-          sudo apt-get install -y python${{ matrix.python-version }}
-      - name: Display Python version
-        run: |
-          python${{ matrix.python-version }} -c "import sys; print(sys.version)" > python_version_${{ matrix.python-version }}.txt
+          echo hello > path/to/artifact/world.txt
+          python -c "import sys; print(sys.version)" >> path/to/artifact/world.txt
+
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: python-versions
-          path: python_version_*.txt
+          name: my-artifact
+          path: path/to/artifact/world.txt
