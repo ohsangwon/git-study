@@ -1,32 +1,35 @@
 name: Python
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.8", "3.9", "4.0"]
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
+        uses: actions/checkout@v3
+
       - name: Set up Python ${{ matrix.python-version }}
-        run: |
-          sudo add-apt-repository ppa:deadsnakes/ppa -y
-          sudo apt-get update -y
-          sudo apt-get install python${{ matrix.python-version }} -y
-      - name: Display Python version
-        run: |
-          python${{ matrix.python-version }} -c "import sys; print(sys.version)" > python_version_${{ matrix.python-version }}.txt
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/setup-python@v2
         with:
-          name: python-versions
-          path: python_version_*.txt
+          python-version: ${{ matrix.python-version }}
+
+      - name: Create artifact directory
+        run: mkdir -p path/to/artifact
+
+      - name: Run Python script and save output
+        run: python my_script.py > path/to/artifact/output.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: path/to/artifact/output.txt
+
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, 3.10]
