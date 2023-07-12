@@ -25,10 +25,10 @@ jobs:
       - name: Run Python script and save output
         run: |
           echo hello > path/to/artifact/world.txt
-          python -c "import sys; print(sys.version)" >> path/to/artifact/world.txt
+          python -c "import sys; print(sys.version)" >> path/to/artifact/pythonversion.txt
 
       - name: Upload artifact for Python ${{ matrix.python-version }}
         uses: actions/upload-artifact@v3
         with:
           name: my-artifact-${{ matrix.python-version }}
-          path: path/to/artifact/world.txt
+          path: path/to/artifact/pythonversion3.txt
