@@ -18,12 +18,13 @@ jobs:
         with:
           node-version: '16'
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
+        run: |
+          sudo add-apt-repository ppa:deadsnakes/ppa -y
+          sudo apt-get update -y
+          sudo apt-get install python${{ matrix.python-version }} -y
       - name: Display Python version
         run: |
-          python -c "import sys; print(sys.version)" > python_version_${{ matrix.python-version }}.txt
+          python${{ matrix.python-version }} -c "import sys; print(sys.version)" > python_version_${{ matrix.python-version }}.txt
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
